@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32714.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{16E70A13-0E9D-4701-92F1-40B7806A320A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{3942A840-4D6B-411F-872D-4294F39E98E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{28EC1774-C95D-461C-879D-F266E2A55979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{514840D1-4968-435A-9F55-1D3076E0F728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common", "Core.Common\Core.Common.csproj", "{A72E25BE-95FD-48C2-A103-E9B316460417}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{514840D1-4968-435A-9F55-1D3076E0F728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514840D1-4968-435A-9F55-1D3076E0F728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514840D1-4968-435A-9F55-1D3076E0F728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514840D1-4968-435A-9F55-1D3076E0F728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A72E25BE-95FD-48C2-A103-E9B316460417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A72E25BE-95FD-48C2-A103-E9B316460417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A72E25BE-95FD-48C2-A103-E9B316460417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A72E25BE-95FD-48C2-A103-E9B316460417}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3942A840-4D6B-411F-872D-4294F39E98E8} = {16E70A13-0E9D-4701-92F1-40B7806A320A}
+		{28EC1774-C95D-461C-879D-F266E2A55979} = {16E70A13-0E9D-4701-92F1-40B7806A320A}
+		{514840D1-4968-435A-9F55-1D3076E0F728} = {28EC1774-C95D-461C-879D-F266E2A55979}
+		{A72E25BE-95FD-48C2-A103-E9B316460417} = {28EC1774-C95D-461C-879D-F266E2A55979}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A45701A-C3C6-4C65-B59E-65943A5745E9}
+	EndGlobalSection
+EndGlobal
