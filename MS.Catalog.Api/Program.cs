@@ -1,5 +1,7 @@
 using Core.Common.Cqrs;
 using Core.Infrastructure.GuidGenerator;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using MS.Catalog.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,21 +21,36 @@ builder.Services.AddInMemoryCommandDispatcher();
 builder.Services.AddQueryHandler();
 builder.Services.AddInMemoryQueryDispatcher();
 
-builder.Services.AddCatalogDbContext(builder.Configuration);
-builder.Services.AddRepositories();
+//builder.Services.AddCatalogDbContext(builder.Configuration);
+//builder.Services.AddRepositories();
 
 
 var app = builder.Build();
+//var routePrefix = $"/{AppName}";
+//app.UsePathBase(routePrefix);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        //c.RoutePrefix = routePrefix;
+    });
 }
 
 app.UseAuthorization();
 
 app.MapControllers();
 
+
+
+
 app.Run();
+
+
+public partial class Program
+{
+    public static string Namespace = "MS.Catalog.Api";
+    public static string AppName = "Catalog";
+}
