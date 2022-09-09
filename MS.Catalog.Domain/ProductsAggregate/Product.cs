@@ -5,6 +5,11 @@ namespace MS.Catalog.Domain.ProductsAggregate
 {
     public class Product:BaseAggregateRoot<Product,ProductId>
     {
+        private Product()
+        {
+
+        }
+
         public ProductName Name { get;private set; }
         public ProductDescription Description { get;private set; }
         public ProductAvailableStock AvailableStock { get; private set; }
