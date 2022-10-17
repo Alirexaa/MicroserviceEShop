@@ -12,8 +12,13 @@ public class CommandDispatcher : ICommandDispatcher
     public async Task<TResult> SendAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken) where TCommand : class, ICommand<TResult>
     {
         using var scope = _serviceProvider.CreateScope();
-        var handler = scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
-        var result = await handler.HandleAsync(command, cancellationToken);
+
+        Task<TResult> handler() => scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>().HandleAsync(command, cancellationToken);
+
+
+        var commandPipelines = scope.ServiceProvider.GetServices<ICommandPipelineBehavior<TCommand, TResult>>();
+        var result = await commandPipelines.Aggregate((CommandHandlerDelegate<TResult>)handler, (next, pipeline)  => () => (Task<TResult>)pipeline.HandelAsync(command,cancellationToken,next))();
+        //var result = await handler.HandleAsync(command, cancellationToken);
         return result;
     }
 }
