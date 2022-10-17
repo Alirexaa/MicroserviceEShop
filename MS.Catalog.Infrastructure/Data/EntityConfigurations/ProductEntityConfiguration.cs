@@ -16,13 +16,16 @@ namespace MS.Catalog.Infrastructure.Data.EntityConfigurations
 
             builder.Property(x => x.Name)
                 .HasColumnType("varchar(50)")
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(n => n, v => v.Value);
 
             builder.Property(x => x.Description)
-                .HasColumnType("varchar(500)");
+                .HasColumnType("varchar(500)")
+                .HasConversion(d=>d,v=>v.Value);
 
             builder.Property(x => x.Price)
-                .HasColumnType("decimal(18,2)");
+                .HasColumnType("decimal(18,2)")
+                .HasConversion(d => d, v => v.Value);
 
             builder.Property(x => x.AvailableStock);
             builder.Ignore(x=>x.DomainEvents);

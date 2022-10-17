@@ -2,5 +2,5 @@
 
 public interface IUnitOfWork
 {
-    public Task Compalete();
+    public Task Complate();
 }

@@ -1,6 +1,4 @@
-﻿using Core.Common.Cqrs.Commands;
-using Core.Domain;
-using MS.Catalog.Domain.ProductsAggregate;
+﻿using MS.Catalog.Domain.ProductsAggregate;
 
 
 namespace MS.Catalog.Application.Products.Commands.CreateProduct
@@ -19,9 +17,9 @@ namespace MS.Catalog.Application.Products.Commands.CreateProduct
 
         public async Task<CreateProductCommandResult> HandleAsync(CreateProductCommand command, CancellationToken cancellationToken = default)
         {
-            var product = new Product(_guidGenerator.Create(), command.Request.Name, command.Request.Description, 0);
+            var product = new Product(_guidGenerator.Create(), command.Request.Name, command.Request.Description);
             await _repository.AddAsync(product, cancellationToken);
-            await _unitOfWork.Compalete();
+            await _unitOfWork.Complate();
             return new CreateProductCommandResult(product.Id);
         }
     }
