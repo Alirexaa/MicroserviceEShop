@@ -13,7 +13,7 @@ namespace MS.Catalog.Infrastructure.Data.EntityConfigurations
             builder.Property(x => x.Id)
                 .HasConversion(id => id.Value, v => v)
                 .ValueGeneratedNever()
-                .HasColumnType("varchar(20)");
+                .HasColumnType("varchar(36)");
 
 
             builder.Property(x => x.Name)

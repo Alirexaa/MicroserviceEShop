@@ -6,9 +6,9 @@ namespace MS.Catalog.Infrastructure.Data.Repositories
 {
     public class BaseRepository<TEntity> : IReadRepository<TEntity>, IRepository<TEntity> where TEntity : class
     {
-        private readonly DbContext _dbContext;
+        private readonly CatalogDbContext _dbContext;
 
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(CatalogDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -84,7 +84,7 @@ namespace MS.Catalog.Infrastructure.Data
 
         public async Task Complate()
         {
-            await SaveChangesAsync();
+          var r =  await SaveChangesAsync();
         }
     }
 }

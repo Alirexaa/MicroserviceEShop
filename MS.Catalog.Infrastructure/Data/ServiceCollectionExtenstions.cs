@@ -16,7 +16,8 @@ namespace MS.Catalog.Infrastructure.Data
                     opt.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName);
                     opt.EnableRetryOnFailure(maxRetryCount:15,maxRetryDelay:TimeSpan.FromSeconds(10),null);
                 })
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .EnableDetailedErrors();
             });
             services.AddScoped<IUnitOfWork, CatalogDbContext>();
             return services;
@@ -26,6 +27,10 @@ namespace MS.Catalog.Infrastructure.Data
         {
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IReadRepository<>), typeof(BaseRepository<>));
+
+            //services.AddScoped(typeof(IReadRepository<>),ctx=>  ctx.GetRequiredService<CatalogDbContext>());
+
+
             return services;
         }
     }

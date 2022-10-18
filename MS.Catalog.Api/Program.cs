@@ -1,11 +1,22 @@
 using Core.Common.Cqrs;
+using Core.Common.Cqrs.Commands;
 using Core.Infrastructure.GuidGenerator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using MS.Catalog.Application.Products.Commands.CreateProduct;
 using MS.Catalog.Infrastructure.Behaviours;
 using MS.Catalog.Infrastructure.Data;
+using Serilog;
+
+var configuration = GetConfiguration();
+
+Log.Logger = CreateSerilogLogger(configuration);
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureAppConfiguration(x => x.AddConfiguration(configuration));
+builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
+builder.Host.UseSerilog();
+
 
 // Add services to the container.
 
@@ -19,7 +30,9 @@ builder.Services.AddSequentialGuidGenerator();
 
 builder.Services.AddCommandHandler();
 builder.Services.AddInMemoryCommandDispatcher();
-builder.Services.AddCommandBehaviours();
+//builder.Services.AddCommandBehaviours();
+
+builder.Services.AddTransient(typeof(ICommandHandler<CreateProductCommand,CreateProductCommandResult>), typeof(CreateProductCommandHandler));
 
 builder.Services.AddQueryHandler();
 builder.Services.AddInMemoryQueryDispatcher();
@@ -58,4 +71,32 @@ public partial class Program
 {
     public static string Namespace = "MS.Catalog.Api";
     public static string AppName = "Catalog";
+
+    static IConfiguration GetConfiguration()
+    {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
+        var config = builder.Build();
+        return builder.Build();
+    }
+    static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+    {
+        //var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+        //var logstashUrl = configuration["Serilog:LogstashgUrl"];
+        return new LoggerConfiguration()
+            .MinimumLevel.Verbose()
+            .Enrich.WithProperty("ApplicationContext", Program.AppName)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            //.WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
+            //.WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+    }
+
 }
+
+
