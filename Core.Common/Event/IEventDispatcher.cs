@@ -9,6 +9,7 @@ namespace Core.Common.Event
 {
     public interface IEventDispatcher
     {
-        Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent;
+        Task PublishLocal<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent;
+        Task Commit<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent;
     }
 }
