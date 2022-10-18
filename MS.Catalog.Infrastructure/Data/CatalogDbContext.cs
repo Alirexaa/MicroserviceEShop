@@ -3,10 +3,12 @@ using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using MS.Catalog.Infrastructure.Data;
+using MS.Catalog.Infrastructure.Data.EntityConfigurations;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,12 @@ namespace MS.Catalog.Infrastructure.Data
         public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         private IDbContextTransaction _currentTransaction;

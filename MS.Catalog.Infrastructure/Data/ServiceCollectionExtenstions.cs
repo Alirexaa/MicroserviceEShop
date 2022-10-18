@@ -1,13 +1,7 @@
 ﻿using Core.Domain;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MS.Catalog.Infrastructure.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MS.Catalog.Infrastructure.Data
 {
@@ -21,7 +15,8 @@ namespace MS.Catalog.Infrastructure.Data
                 { 
                     opt.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName);
                     opt.EnableRetryOnFailure(maxRetryCount:15,maxRetryDelay:TimeSpan.FromSeconds(10),null);
-                });
+                })
+                .UseSnakeCaseNamingConvention();
             });
             services.AddScoped<IUnitOfWork, CatalogDbContext>();
             return services;

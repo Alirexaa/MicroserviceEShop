@@ -11,23 +11,30 @@ namespace MS.Catalog.Infrastructure.Data.EntityConfigurations
             builder.HasKey(x => x.Id);
             builder.HasIndex(x => x.Id);
             builder.Property(x => x.Id)
-                .HasConversion(id => id, v => v.Value)
-                .ValueGeneratedNever();
+                .HasConversion(id => id.Value, v => v)
+                .ValueGeneratedNever()
+                .HasColumnType("varchar(20)");
+
 
             builder.Property(x => x.Name)
                 .HasColumnType("varchar(50)")
                 .IsRequired()
-                .HasConversion(n => n, v => v.Value);
+                .HasConversion(n => n.Value, v => v);
+
+
+
 
             builder.Property(x => x.Description)
                 .HasColumnType("varchar(500)")
-                .HasConversion(d=>d,v=>v.Value);
+                .HasConversion(d => d.Value, v => v);
 
             builder.Property(x => x.Price)
                 .HasColumnType("decimal(18,2)")
-                .HasConversion(d => d, v => v.Value);
+                .HasConversion(d => d.Value, v => v);
 
-            builder.Property(x => x.AvailableStock);
+            builder.Property(x => x.AvailableStock)
+                .HasConversion(a=>a.Value,v=>v);
+
             builder.Ignore(x=>x.DomainEvents);
                 
         }

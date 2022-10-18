@@ -7,9 +7,9 @@ using System.Net;
 namespace MS.Catalog.Api.Controllers.v1
 {
     [Route("api/v1/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
-    public class ProductController:ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
 
@@ -24,8 +24,8 @@ namespace MS.Catalog.Api.Controllers.v1
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> CreateProductAsync(CreateProductRequest createProductRequest)
         {
-           var result = await  _commandDispatcher
-                .SendAsync<CreateProductCommand,CreateProductCommandResult>(new CreateProductCommand(createProductRequest));
+            var result = await _commandDispatcher
+                 .SendAsync<CreateProductCommand, CreateProductCommandResult>(new CreateProductCommand(createProductRequest));
 
             return CreatedAtRoute(nameof(ProductByIdAsync), new { id = result.ProductId });
         }

@@ -27,6 +27,9 @@ builder.Services.AddInMemoryQueryDispatcher();
 builder.Services.AddCatalogDbContext(builder.Configuration);
 builder.Services.AddRepositories();
 
+//builder.Services.AddAuthentication();
+//builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 //var routePrefix = $"/{AppName}";
@@ -42,12 +45,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseAuthorization();
+//app.UseAuthentication();
+
+//app.UseAuthorization();
 
 app.MapControllers();
-
-
-
 
 app.Run();
 
