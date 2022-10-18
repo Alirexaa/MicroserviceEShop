@@ -18,7 +18,7 @@ namespace MS.Catalog.Infrastructure.Data
             services.AddDbContext<CatalogDbContext>(c =>
             {
                 c.UseNpgsql(configuration["PostgresOptions:ConnectionString"], opt =>
-                {
+                { 
                     opt.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName);
                     opt.EnableRetryOnFailure(maxRetryCount:15,maxRetryDelay:TimeSpan.FromSeconds(10),null);
                 });

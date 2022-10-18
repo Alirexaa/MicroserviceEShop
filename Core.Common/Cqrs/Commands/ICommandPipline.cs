@@ -9,6 +9,6 @@ namespace Core.Common.Cqrs.Commands
     public delegate Task<TCommandResult> CommandHandlerDelegate<TCommandResult>();
     public interface ICommandPipelineBehavior<TCommand,TCommandResult> 
     {
-        public Task HandelAsync(TCommand command,CancellationToken cancellationToken,CommandHandlerDelegate<TCommandResult> next);
+        public Task<TCommandResult> HandelAsync(TCommand command,CancellationToken cancellationToken,CommandHandlerDelegate<TCommandResult> next);
     }
 }

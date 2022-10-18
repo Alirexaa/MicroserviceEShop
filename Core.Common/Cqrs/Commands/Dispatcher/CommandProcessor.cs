@@ -17,7 +17,7 @@ public class CommandDispatcher : ICommandDispatcher
 
 
         var commandPipelines = scope.ServiceProvider.GetServices<ICommandPipelineBehavior<TCommand, TResult>>();
-        var result = await commandPipelines.Aggregate((CommandHandlerDelegate<TResult>)handler, (next, pipeline)  => () => (Task<TResult>)pipeline.HandelAsync(command,cancellationToken,next))();
+        var result = await commandPipelines.Aggregate((CommandHandlerDelegate<TResult>)handler, (next, pipeline)  => () => pipeline.HandelAsync(command,cancellationToken,next))();
         //var result = await handler.HandleAsync(command, cancellationToken);
         return result;
     }

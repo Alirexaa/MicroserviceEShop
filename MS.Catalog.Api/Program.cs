@@ -2,6 +2,7 @@ using Core.Common.Cqrs;
 using Core.Infrastructure.GuidGenerator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using MS.Catalog.Infrastructure.Behaviours;
 using MS.Catalog.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,14 +16,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSequentialGuidGenerator();
 
+
 builder.Services.AddCommandHandler();
 builder.Services.AddInMemoryCommandDispatcher();
+builder.Services.AddCommandBehaviours();
 
 builder.Services.AddQueryHandler();
 builder.Services.AddInMemoryQueryDispatcher();
 
-//builder.Services.AddCatalogDbContext(builder.Configuration);
-//builder.Services.AddRepositories();
+builder.Services.AddCatalogDbContext(builder.Configuration);
+builder.Services.AddRepositories();
 
 
 var app = builder.Build();

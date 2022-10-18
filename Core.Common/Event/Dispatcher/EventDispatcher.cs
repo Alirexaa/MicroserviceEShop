@@ -18,11 +18,6 @@ namespace Core.Common.Event.Dispatcher
             _serviceProvider = serviceProvider;
         }
 
-        public Task Commit<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task PublishLocal<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
         {
             using var scope = _serviceProvider.CreateScope();
