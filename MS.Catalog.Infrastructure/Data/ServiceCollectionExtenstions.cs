@@ -18,8 +18,8 @@ namespace MS.Catalog.Infrastructure.Data
                 })
                 .UseSnakeCaseNamingConvention()
                 .EnableDetailedErrors();
-            });
-            services.AddScoped<IUnitOfWork, CatalogDbContext>();
+            },ServiceLifetime.Scoped);
+            services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<CatalogDbContext>());
             return services;
         }
 

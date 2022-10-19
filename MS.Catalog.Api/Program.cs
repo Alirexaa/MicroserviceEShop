@@ -7,6 +7,7 @@ using MS.Catalog.Application.Products.Commands.CreateProduct;
 using MS.Catalog.Infrastructure.Behaviours;
 using MS.Catalog.Infrastructure.Data;
 using Serilog;
+using System.Reflection;
 
 var configuration = GetConfiguration();
 
@@ -28,13 +29,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSequentialGuidGenerator();
 
 
-builder.Services.AddCommandHandler();
+builder.Services.AddCommandHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryCommandDispatcher();
 //builder.Services.AddCommandBehaviours();
 
-builder.Services.AddTransient(typeof(ICommandHandler<CreateProductCommand,CreateProductCommandResult>), typeof(CreateProductCommandHandler));
+//builder.Services.AddTransient(typeof(ICommandHandler<CreateProductCommand, CreateProductCommandResult>), typeof(CreateProductCommandHandler));
 
-builder.Services.AddQueryHandler();
+builder.Services.AddQueryHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryQueryDispatcher();
 
 builder.Services.AddCatalogDbContext(builder.Configuration);
