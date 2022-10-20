@@ -3,15 +3,16 @@ using Core.Common.Cqrs.Commands.Dispatcher;
 using Core.Common.Cqrs.Queris;
 using Core.Common.Cqrs.Queris.Dispatcher;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Core.Common.Cqrs
 {
     public static class Extensions
     {
-        public static IServiceCollection AddCommandHandler(this IServiceCollection services)
+        public static IServiceCollection AddCommandHandler(this IServiceCollection services,Assembly assembly)
         {
             services.Scan(s =>
-            s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+            s.FromAssemblies(assembly)
             .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<,>))
             ).AsImplementedInterfaces()
             .WithTransientLifetime());
@@ -24,10 +25,10 @@ namespace Core.Common.Cqrs
             return services;
         }
 
-        public static IServiceCollection AddQueryHandler(this IServiceCollection services)
+        public static IServiceCollection AddQueryHandler(this IServiceCollection services, Assembly assembly)
         {
             services.Scan(s =>
-            s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+            s.FromAssemblies(assembly)
             .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>))
             ).AsImplementedInterfaces()
             .WithTransientLifetime());

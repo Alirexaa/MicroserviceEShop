@@ -19,7 +19,7 @@ namespace MS.Catalog.Api.Controllers.v1
         }
 
 
-        [Route("items")]
+        [Route(ProductControllerRoutes.CreateProduct)]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> CreateProductAsync(CreateProductRequest createProductRequest)
@@ -27,12 +27,12 @@ namespace MS.Catalog.Api.Controllers.v1
             var result = await _commandDispatcher
                  .SendAsync<CreateProductCommand, CreateProductCommandResult>(new CreateProductCommand(createProductRequest));
 
-            return CreatedAtRoute(nameof(ProductByIdAsync), new { id = result.ProductId });
+            return Ok(result);
         }
 
 
-        [Route("items/{id:int}")]
-        [HttpGet]
+        [Route(ProductControllerRoutes.ProductById)]
+        [HttpGet()]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -40,5 +40,11 @@ namespace MS.Catalog.Api.Controllers.v1
         {
             return Ok();
         }
+    }
+
+    public class ProductControllerRoutes
+    {
+        public const string CreateProduct = "items";
+        public const string ProductById = "items/{id}";
     }
 }
