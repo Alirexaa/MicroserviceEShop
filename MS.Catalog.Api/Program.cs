@@ -1,11 +1,17 @@
 using Core.Common.Cqrs;
 using Core.Common.Cqrs.Commands;
+using Core.Common.Messaging;
+using Core.Domain;
 using Core.Infrastructure.GuidGenerator;
+using Core.Infrastructure.Messaging.RabbitMQ;
+using Infrastructure.MessageBrokers.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using MS.Catalog.Application.Products.Commands.CreateProduct;
 using MS.Catalog.Infrastructure.Behaviours;
 using MS.Catalog.Infrastructure.Data;
+using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
 
@@ -40,6 +46,11 @@ builder.Services.AddInMemoryQueryDispatcher();
 builder.Services.AddCatalogDbContext(builder.Configuration);
 builder.Services.AddRepositories();
 
+builder.Services.AddRabbitMQ(configuration);
+
+
+
+
 //builder.Services.AddAuthentication();
 //builder.Services.AddAuthorization();
 
@@ -62,7 +73,12 @@ if (app.Environment.IsDevelopment())
 
 //app.UseAuthorization();
 
+
+//app.UseSubscribeAllEvents(Assembly.Load("MS.Catalog.Domain"));
+
+
 app.MapControllers();
+
 
 app.Run();
 
@@ -96,6 +112,8 @@ public partial class Program
             .ReadFrom.Configuration(configuration)
             .CreateLogger();
     }
+
+
 
 }
 
