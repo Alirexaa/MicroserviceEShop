@@ -9,10 +9,10 @@ namespace Core.Common.Cqrs
 {
     public static class Extensions
     {
-        public static IServiceCollection AddCommandHandler(this IServiceCollection services,Assembly assemblyContainsHandler)
+        public static IServiceCollection AddCommandHandler(this IServiceCollection services,Assembly assembly)
         {
             services.Scan(s =>
-            s.FromAssemblies(assemblyContainsHandler)
+            s.FromAssemblies(assembly)
             .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<,>))
             ).AsImplementedInterfaces()
             .WithTransientLifetime());
@@ -25,10 +25,10 @@ namespace Core.Common.Cqrs
             return services;
         }
 
-        public static IServiceCollection AddQueryHandler(this IServiceCollection services,Assembly assemblyContainsHandlers)
+        public static IServiceCollection AddQueryHandler(this IServiceCollection services, Assembly assembly)
         {
             services.Scan(s =>
-            s.FromAssemblies(assemblyContainsHandlers)
+            s.FromAssemblies(assembly)
             .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>))
             ).AsImplementedInterfaces()
             .WithTransientLifetime());

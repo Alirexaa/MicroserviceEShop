@@ -26,14 +26,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSequentialGuidGenerator();
+builder.Services.AddSequentialGuidGenerator(SequentialGuidType.SequentialAsString);
 
 
 builder.Services.AddCommandHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryCommandDispatcher();
 //builder.Services.AddCommandBehaviours();
 
-//builder.Services.AddTransient(typeof(ICommandHandler<CreateProductCommand, CreateProductCommandResult>), typeof(CreateProductCommandHandler));
+builder.Services.AddTransient(typeof(ICommandHandler<CreateProductCommand,CreateProductCommandResult>), typeof(CreateProductCommandHandler));
 
 builder.Services.AddQueryHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryQueryDispatcher();
