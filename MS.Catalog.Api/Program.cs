@@ -39,7 +39,6 @@ builder.Services.AddCommandHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryCommandDispatcher();
 //builder.Services.AddCommandBehaviours();
 
-
 builder.Services.AddQueryHandler(Assembly.Load("MS.Catalog.Application"));
 builder.Services.AddInMemoryQueryDispatcher();
 
