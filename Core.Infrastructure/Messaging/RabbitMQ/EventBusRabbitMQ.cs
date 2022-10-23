@@ -18,16 +18,18 @@ using System.Threading.Tasks;
 
 namespace Core.Infrastructure.Messaging.RabbitMQ
 {
-    public class EventBusRabbitMQ : IEventListener
+    internal class EventBusRabbitMQ : IEventListener
     {
         private readonly IRabbitMQPersistentConnection _persistentConnection;
         private readonly ILogger<EventBusRabbitMQ> _logger;
         private readonly IConventionsBuilder _conventionsBuilder;
-        public EventBusRabbitMQ(IRabbitMQPersistentConnection connection, ILogger<EventBusRabbitMQ> logger, IConventionsBuilder conventionsBuilder)
+        private readonly IRabbitMqSerializer _serializer;
+        public EventBusRabbitMQ(IRabbitMQPersistentConnection connection, ILogger<EventBusRabbitMQ> logger, IConventionsBuilder conventionsBuilder, IRabbitMqSerializer serializer)
         {
             _persistentConnection = connection;
             _logger = logger;
             _conventionsBuilder = conventionsBuilder;
+            _serializer = serializer;
         }
         public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
         {
@@ -58,30 +60,28 @@ namespace Core.Infrastructure.Messaging.RabbitMQ
             var routingKey = _conventionsBuilder.GetRoutingKey(typeof(TEvent));
             var queue = _conventionsBuilder.GetQueue(typeof(TEvent));
 
-            
+
 
             channel.ExchangeDeclare(exchange: exchange, type: "topic");
             channel.QueueDeclare(queue, exclusive: false, autoDelete: false);
-            channel.QueueBind(queue,exchange,routingKey);
+            channel.QueueBind(queue, exchange, routingKey);
 
 
-            var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
 
 
             policy.Execute(() =>
             {
+                var body = _serializer.Serialize(@event);
                 var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2; // persistent
+
                 _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event);
 
                 channel.BasicPublish(
                     exchange: exchange,
                     routingKey: routingKey,
                     basicProperties: properties,
-                    body: body);
+                    body: body.ToArray());
             });
 
             return Task.CompletedTask;
@@ -107,14 +107,12 @@ namespace Core.Infrastructure.Messaging.RabbitMQ
 
 
             var queue = _conventionsBuilder.GetQueue(type);
-            
+
 
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.Received += async (model, eventArgs) =>
             {
-                var body = eventArgs.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                
+                var message = _serializer.Deserialize(eventArgs.Body.Span);
                 Console.WriteLine(message);
 
                 //channel.BasicAck(eventArgs.DeliveryTag, false);

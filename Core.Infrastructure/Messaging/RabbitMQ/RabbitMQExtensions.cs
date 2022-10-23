@@ -2,6 +2,7 @@
 using Core.Domain;
 using Core.Infrastructure.Messaging.RabbitMQ;
 using Core.Infrastructure.Messaging.RabbitMQ.Conventions;
+using Core.Infrastructure.Messaging.RabbitMQ.Serializers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,16 +37,20 @@ namespace Infrastructure.MessageBrokers.RabbitMQ
                 return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
             });
             services.AddSingleton<IConventionsBuilder, ConventionsBuilder>();
+           services.AddSingleton<IRabbitMqSerializer, SystemTextJsonJsonRabbitMqSerializer>();
+
             services.AddSingleton<IEventListener, EventBusRabbitMQ>(sp =>
             {
                 var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
                 var conventionsBuilder = sp.GetRequiredService<IConventionsBuilder>();
+                var serializer = sp.GetRequiredService<IRabbitMqSerializer>();
+
 
                 var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
 
                 var retryCount = 5;
 
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, conventionsBuilder);
+                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, conventionsBuilder, serializer);
             });
 
             return services;
